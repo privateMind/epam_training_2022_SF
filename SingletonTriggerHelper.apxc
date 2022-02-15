@@ -1,0 +1,14 @@
+public class SingletonTriggerHelper {
+	private static Boolean flag = true;
+
+	public static void OnAfterInsert (List <Account> accounts) {
+		System.debug(flag);
+        	if (flag) {
+        		for (Account account:accounts){
+            		account.Name =  account.Name +' '+ string.valueof(Datetime.now());
+        		}
+				flag = false;
+        		System.debug(flag);
+			}
+	}
+}
