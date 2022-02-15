@@ -1,0 +1,37 @@
+trigger accountTrigger on Account (after delete, 
+                                   after insert, 
+                                   after undelete, 
+                                   after update, 
+                                   before delete, 
+                                   before insert, 
+                                   before update) {
+				   
+    // before insert
+    if(Trigger.isInsert && Trigger.isBefore){
+        accountTriggerHandler.OnBeforeInsert(Trigger.new);
+    }
+    // after insert
+    else if(Trigger.isInsert && Trigger.isAfter){
+        accountTriggerHandler.OnAfterInsert(Trigger.new, Trigger.newMap);
+    }
+    // before update                                   
+    else if(Trigger.isUpdate && Trigger.isBefore){
+        accountTriggerHandler.OnBeforeUpdate(Trigger.new, Trigger.old, Trigger.newMap);
+    }
+    // after update
+    else if(Trigger.isUpdate && Trigger.isAfter){
+        accountTriggerHandler.OnAfterUpdate(Trigger.new, Trigger.old, Trigger.newMap, Trigger.oldMap);
+    }
+    // before delete                                   
+    else if(Trigger.isDelete && Trigger.isBefore){
+        accountTriggerHandler.OnBeforeDelete(Trigger.old, Trigger.oldMap);
+    }
+    // after delete                                    
+    else if(Trigger.isDelete && Trigger.isAfter){
+        accountTriggerHandler.OnAfterDelete(Trigger.old, Trigger.oldMap);
+    }
+    // undelete
+    else if(Trigger.isUnDelete){
+        accountTriggerHandler.OnUndelete(Trigger.new);
+    }
+}
