@@ -1,0 +1,16 @@
+public class SyncContactsFromAccounts implements Queueable {
+    Set<Id> accountIds;
+    
+    public SyncContactsFromAccounts (Set<Id> accountIds) {
+    	this.accountIds = new Set<Id>(accountIds);
+    }
+    	
+    public void execute(QueueableContext context) {
+        List<Contact> contacts = [SELECT Id FROM Contact WHERE AccountId IN : accountIds];   
+        for (Contact contact : contacts){
+            contact.Is_Synced__c = false;
+            contact.Processed_By_Queue__c = true;
+        }
+        update contacts;
+ 	   }
+}
