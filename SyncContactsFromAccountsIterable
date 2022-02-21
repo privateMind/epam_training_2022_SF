@@ -1,0 +1,35 @@
+public class SyncContactsFromAccountsIterable implements Database.batchable<Contact>{ 
+   public Iterable<Contact> start(Database.BatchableContext bc){ 
+       return new InvokerCustom(); 
+   }     
+   public void execute(Database.BatchableContext bc, List<Contact> contacts){
+       List<Account> accountsRelated = new List<Account>();
+       // Map<Id,Address> accountsMailingAddresses = new Map<Id,Address>(); This Map is for another way of solving
+       Set<Id> accountIds = new Set<Id>();
+       // Collecting accountIds to Set
+       for(Contact contact : contacts){ 
+           accountIds.add(contact.AccountId);
+           contact.Is_Synced__c = true;
+       }
+       // Quering accounts to the list 
+       accountsRelated = [SELECT Id,BillingStreet,BillingCity,BillingState,BillingPostalCode,BillingCountry
+                          FROM Account WHERE Id IN : accountIds];
+       // Collecting account Ids and MailingAdresses to the map
+       for (Account account : accountsRelated){
+           account.Updated_By_Contact__c = true;
+           for (Contact contact : contacts){
+               if (account.Id == contact.AccountId){
+               		contact.MailingStreet     = account.BillingStreet;
+        			contact.MailingCity       = account.BillingCity;
+        			contact.MailingState      = account.BillingState;
+        			contact.MailingPostalCode = account.BillingPostalCode;
+        			contact.MailingCountry    = account.BillingCountry;
+               }
+           }
+       }
+       update contacts;
+       update accountsRelated; 
+   }     
+   public void finish(Database.BatchableContext bc){     
+   } 
+}
