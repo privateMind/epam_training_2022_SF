@@ -1,0 +1,5 @@
+public class InvokerCustom implements Iterable<Contact>{
+	public Iterator<Contact> Iterator(){
+		return new CustomIterable();
+	}
+}
