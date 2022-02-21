@@ -1,0 +1,23 @@
+global class CustomIterable implements Iterator<Contact>{ 
+
+   List<Contact> contacts {get; set;} 
+   Integer i {get; set;} 
+
+   public CustomIterable(){ 
+       contacts = [SELECT Id,AccountId FROM Contact WHERE Is_Synced__c = false]; 
+       i = 0; 		
+   }   
+
+   global boolean hasNext(){ 
+       if(i >= contacts.size()) {
+           return false; 
+       } else {
+           return true; 
+       }
+   }    
+
+   global Contact next(){ 
+       i++; 
+       return contacts[i-1]; 
+   } 
+}
