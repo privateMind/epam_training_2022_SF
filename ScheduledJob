@@ -1,0 +1,9 @@
+global class ScheduledJob implements Schedulable {
+   global void execute(SchedulableContext SC) {
+      SyncContactsFromAccountsIterable syncContactsFromAccounts = new SyncContactsFromAccountsIterable ();
+      SyncTasksFromAccounts syncTasksFromAccounts = new SyncTasksFromAccounts ();
+      Database.executeBatch(syncContactsFromAccounts);
+      Database.executeBatch(syncTasksFromAccounts);
+      system.debug('We are in the Schedulable');
+   }
+}
